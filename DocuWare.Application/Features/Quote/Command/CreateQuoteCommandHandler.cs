@@ -1,4 +1,6 @@
 ﻿using DocuWare.Application.Contracts;
+using DocuWare.Application.Exceptions;
+using DocuWare.Common.Constants;
 using DocuWare.Domain.Entities;
 using MediatR;
 
@@ -6,17 +8,17 @@ namespace DocuWare.Application.Features.Quote.Command;
 
 public class CreateQuoteCommandHandler : IRequestHandler<CreateQuoteCommand>
 {
-    private readonly IRepository<Character> _characterRepository;
-    private readonly IRepository<Movie> _movieRepository;
+    private readonly ICharacterByQuoteContentRepository _characterByQuoteContentRepository;
+    private readonly IMovieByQuoteContentRepository _movieByQuoteContentRepository;
     private readonly IRepository<Domain.Entities.Quote> _quoteRepository;
 
     public CreateQuoteCommandHandler(IRepository<Domain.Entities.Quote> quoteRepository,
-        IRepository<Movie> movieRepository,
-        IRepository<Character> characterRepository)
+        ICharacterByQuoteContentRepository characterByQuoteContentRepository,
+        IMovieByQuoteContentRepository movieByQuoteContentRepository)
     {
         _quoteRepository = quoteRepository;
-        _movieRepository = movieRepository;
-        _characterRepository = characterRepository;
+        _characterByQuoteContentRepository = characterByQuoteContentRepository;
+        _movieByQuoteContentRepository = movieByQuoteContentRepository;
     }
 
     public async Task<Unit> Handle(CreateQuoteCommand command, CancellationToken cancellationToken)
@@ -26,6 +28,16 @@ public class CreateQuoteCommandHandler : IRequestHandler<CreateQuoteCommand>
             Content = command.Content
         };
 
+        var movieByQuoteContent = await _movieByQuoteContentRepository.GetMovieByQuoteContent(command.Content);
+        var movies = movieByQuoteContent.ToList();
+        if (!movies.Any()) throw new UserFriendlyException(ErrorMessage.NoMovieFound);
+
+        var characterByQuoteContent = await _characterByQuoteContentRepository.GetMovieByQuoteContent(command.Content);
+        var characters = characterByQuoteContent as Character[] ?? characterByQuoteContent.ToArray();
+        if (!characters.Any()) throw new UserFriendlyException(ErrorMessage.NoCharacterFound);
+
+        quote.Character = characters.FirstOrDefault()!;
+        quote.Movie = movies.FirstOrDefault()!;
         _quoteRepository.Add(quote);
         await _quoteRepository.SaveChangesAsync();
 

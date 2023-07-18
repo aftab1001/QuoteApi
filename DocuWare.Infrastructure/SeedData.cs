@@ -20,87 +20,58 @@ public static class SeedData
                 {
                     new()
                     {
-                        Content = "Action, Adventure, Drama"
-                    }
-                },
-                Characters = new List<Character>
-                {
-                    new()
-                    {
-                        Name = "Hero",
+                        Content = "Action, Adventure, Drama",
+                        Character = new Character
+                        {
+                            Name = "Hero"
+                        },
                         Actor = new Actor
                         {
                             Name = "Russell Crowe"
-                        },
-                        Quotes = new List<Quote>
-                        {
-                            new()
-                            {
-                                Content = "Action, Adventure, Drama"
-                            }
                         }
                     }
                 }
             },
             new()
             {
-                Title = "Primal Fear",
+                Title = "Gladiator1",
                 Quotes = new List<Quote>
                 {
                     new()
                     {
-                        Content = "Drama"
-                    }
-                },
-                Characters = new List<Character>
-                {
-                    new()
-                    {
-                        Name = "Hero",
+                        Content = "Action, Adventure, Drama",
+                        Character = new Character
+                        {
+                            Name = "Hero"
+                        },
                         Actor = new Actor
                         {
-                            Name = "Richard Gere"
-                        },
-                        Quotes = new List<Quote>
-                        {
-                            new()
-                            {
-                                Content = "Action, Adventure, Drama"
-                            }
+                            Name = "Russell Crowe"
                         }
                     }
                 }
             },
             new()
             {
-                Title = "The Godfather",
+                Title = "Gladiator2",
                 Quotes = new List<Quote>
                 {
                     new()
                     {
-                        Content = "Adventure"
-                    }
-                },
-                Characters = new List<Character>
-                {
-                    new()
-                    {
-                        Name = "Hero",
+                        Content = "Action, Adventure, Drama",
+                        Character = new Character
+                        {
+                            Name = "Hero"
+                        },
                         Actor = new Actor
                         {
-                            Name = "Vincent Cassel"
-                        },
-                        Quotes = new List<Quote>
-                        {
-                            new()
-                            {
-                                Content = "Action, Adventure, Drama"
-                            }
+                            Name = "Russell Crowe"
                         }
                     }
                 }
             }
         };
+
 
         context.Movies.AddRange(movies);
         context.SaveChanges();

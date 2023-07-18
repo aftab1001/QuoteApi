@@ -25,6 +25,7 @@ public class AssignActorToQuoteCommandHandler : IRequestHandler<AssignActorToQuo
 
         if (actor == null) throw new Exception("Actor not found.");
 
+        quote.Actor = actor;
         await _quoteRepository.SaveChangesAsync();
 
         return Unit.Value;

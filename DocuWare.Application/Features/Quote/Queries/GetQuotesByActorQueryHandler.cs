@@ -5,7 +5,8 @@ namespace DocuWare.Application.Features.Quote.Queries;
 
 public class GetQuotesByActorQueryHandler : IRequestHandler<GetQuotesByActorQuery, IEnumerable<Domain.Entities.Quote>>
 {
-   private readonly IQuoteByActorRepository _quoteByActorRepository;
+    private readonly IQuoteByActorRepository _quoteByActorRepository;
+
     public GetQuotesByActorQueryHandler(IQuoteByActorRepository quoteByActorRepository)
     {
         _quoteByActorRepository = quoteByActorRepository;

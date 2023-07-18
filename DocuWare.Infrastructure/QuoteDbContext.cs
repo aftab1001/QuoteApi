@@ -16,6 +16,6 @@ public class QuoteDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Configure any additional mappings or constraints here
+        // No additional mappings or constraints here
     }
 }

@@ -11,6 +11,8 @@ public static class InfrastructureServiceRegistration
         services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
         services.AddScoped<IQuoteByMovieRepository, QuoteByMovieRepository>();
         services.AddScoped<IQuoteByActorRepository, QuoteByActorRepository>();
+        services.AddScoped<IMovieByQuoteContentRepository, MovieByQuoteContentRepository>();
+        services.AddScoped<ICharacterByQuoteContentRepository, CharacterByQuoteContentRepository>();
         var dbContext = services.BuildServiceProvider().GetRequiredService<QuoteDbContext>();
         SeedData.Initialize(dbContext);
         return services;

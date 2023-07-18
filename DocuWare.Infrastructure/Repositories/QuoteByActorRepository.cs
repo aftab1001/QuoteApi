@@ -17,8 +17,8 @@ public class QuoteByActorRepository : IQuoteByActorRepository
     {
         return Task.FromResult<IEnumerable<Quote>>(
             _context.Quotes
-                .Include(x => x.Characters).ThenInclude(y => y.Actor)
-                .Where(q => q.Characters.Any(x => x.Actor.Id == actorId))
+                .Include(x => x.Character).Include(y => y.Actor)
+                .Where(q => q.Actor.Id == actorId)
                 .ToList());
     }
 }

@@ -1,5 +1,4 @@
 ﻿using DocuWare.Application.Contracts;
-using DocuWare.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace DocuWare.Infrastructure.Repositories;
@@ -46,14 +45,6 @@ public class Repository<T> : IRepository<T> where T : class
         await _context.SaveChangesAsync();
     }
 
-
-    public Task<IEnumerable<Quote>> GetQuotesByActorAsync(int actorId)
-    {
-        return Task.FromResult<IEnumerable<Quote>>(_dbSet.OfType<Quote>().Include(x => x.Characters)
-            .ThenInclude(y => y.Actor)
-            .Where(q => q.Characters.Any(x => x.Actor.Id == actorId))
-            .ToList());
-    }
 
     public T GetById(int id)
     {

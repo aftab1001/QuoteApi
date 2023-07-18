@@ -17,6 +17,6 @@ public class QuoteByMovieRepository : IQuoteByMovieRepository
     {
         return Task.FromResult<IEnumerable<Quote>>(
             _context.Quotes
-                .Include(x => x.Movies).Where(x => x.Movies.Any(movie => movie.Id == movieId)).ToList());
+                .Include(x => x.Movie).Where(x => x.Movie.Id == movieId).ToList());
     }
 }

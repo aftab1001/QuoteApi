@@ -20,38 +20,37 @@ public class QuotesController : ControllerBase
     }
 
     [HttpPost]
-    public IActionResult CreateQuote([FromBody] CreateQuoteCommand command)
+    public async Task<IActionResult> CreateQuote([FromBody] CreateQuoteCommand command)
     {
         _logger.LogInformation(SendCreateQuoteCommandRequest);
-        _mediator.Send(command);
+        await _mediator.Send(command);
 
         return Ok();
     }
 
     [HttpGet]
-    public IActionResult GetQuotes()
+    public async Task<IActionResult> GetQuotes()
     {
-        // Create the query and send it to the mediator
         var query = new GetQuotesQuery();
-        var quotes = _mediator.Send(query);
+        var quotes = await _mediator.Send(query);
 
         return Ok(quotes);
     }
 
     [HttpGet("by-movie/{movieId}")]
-    public IActionResult GetQuotesByMovie(int movieId)
+    public async Task<IActionResult> GetQuotesByMovie(int movieId)
     {
         var query = new GetQuotesByMovieQuery(movieId);
-        var quotes = _mediator.Send(query);
+        var quotes = await _mediator.Send(query);
 
         return Ok(quotes);
     }
 
     [HttpGet("by-actor/{actorId}")]
-    public IActionResult GetQuotesByActor(int actorId)
+    public async Task<IActionResult> GetQuotesByActor(int actorId)
     {
         var query = new GetQuotesByActorQuery(actorId);
-        var quotes = _mediator.Send(query);
+        var quotes = await _mediator.Send(query);
 
         return Ok(quotes);
     }
