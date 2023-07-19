@@ -10,6 +10,7 @@ namespace DocuWare.Application.Features.Quote.Command;
 
 public class CreateQuoteCommandHandler : IRequestHandler<CreateQuoteCommand, CreateQuoteResponseDto>
 {
+    private readonly IActorByQuoteContentRepository _actorByQuoteContentRepository;
     private readonly ICharacterByQuoteContentRepository _characterByQuoteContentRepository;
     private readonly ILogger<CreateQuoteCommandHandler> _logger;
     private readonly IMovieByQuoteContentRepository _movieByQuoteContentRepository;
@@ -17,12 +18,14 @@ public class CreateQuoteCommandHandler : IRequestHandler<CreateQuoteCommand, Cre
 
     public CreateQuoteCommandHandler(IRepository<Domain.Entities.Quote> quoteRepository,
         ICharacterByQuoteContentRepository characterByQuoteContentRepository,
-        IMovieByQuoteContentRepository movieByQuoteContentRepository, ILogger<CreateQuoteCommandHandler> logger)
+        IMovieByQuoteContentRepository movieByQuoteContentRepository, ILogger<CreateQuoteCommandHandler> logger,
+        IActorByQuoteContentRepository actorByQuoteContentRepository)
     {
         _quoteRepository = quoteRepository;
         _characterByQuoteContentRepository = characterByQuoteContentRepository;
         _movieByQuoteContentRepository = movieByQuoteContentRepository;
         _logger = logger;
+        _actorByQuoteContentRepository = actorByQuoteContentRepository;
     }
 
     public async Task<CreateQuoteResponseDto> Handle(CreateQuoteCommand command, CancellationToken cancellationToken)
@@ -37,6 +40,7 @@ public class CreateQuoteCommandHandler : IRequestHandler<CreateQuoteCommand, Cre
 
             await AssignMovieToTheQuote(quote);
             await AssignCharacterToTheQuote(quote);
+            await AssignActorToQuote(quote);
 
             _quoteRepository.Add(quote);
             await _quoteRepository.SaveChangesAsync();
@@ -51,12 +55,17 @@ public class CreateQuoteCommandHandler : IRequestHandler<CreateQuoteCommand, Cre
         return result;
     }
 
+    private async Task AssignActorToQuote(Domain.Entities.Quote quote)
+    {
+        var actors = await _actorByQuoteContentRepository.GetActorByQuoteContent(quote.Content);
+        quote.Actor = actors.FirstOrDefault()!;
+    }
+
     private async Task AssignCharacterToTheQuote(Domain.Entities.Quote quote)
     {
         var characterByQuoteContent = await _characterByQuoteContentRepository.GetMovieByQuoteContent(quote.Content);
         var characters = characterByQuoteContent as Character[] ?? characterByQuoteContent.ToArray();
         if (!characters.Any()) throw new UserFriendlyException(ErrorMessage.NoCharacterFound);
-
         quote.Character = characters.FirstOrDefault()!;
     }
 

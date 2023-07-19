@@ -2,7 +2,6 @@
 using DocuWare.Application.Features.Quote.Command;
 using DocuWare.Application.Features.Quote.Dtos;
 using DocuWare.Application.Features.Quote.Queries;
-using DocuWare.Domain.Entities;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 

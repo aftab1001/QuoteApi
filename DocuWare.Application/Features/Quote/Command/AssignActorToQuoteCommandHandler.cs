@@ -25,25 +25,29 @@ public class
         CancellationToken cancellationToken)
     {
         var result = new AssignActorToQuoteResponseDto();
-        try
+
+        var quote = await _quoteRepository.GetByIdAsync(command.QuoteId);
+
+        if (quote == null)
         {
-            var quote = await _quoteRepository.GetByIdAsync(command.QuoteId);
-            if (quote == null) throw new Exception("Quote not found.");
-
-            var actor = await _actorRepository.GetByIdAsync(command.ActorId);
-
-            if (actor == null) throw new Exception("Actor not found.");
-
-            quote.Actor = actor;
-            await _quoteRepository.SaveChangesAsync();
-            result.SetSuccess(true);
+            result.Message = "Quote not found.";
+            _logger.LogError(result.Message);
+            return result;
         }
-        catch (Exception exception)
+
+        var actor = await _actorRepository.GetByIdAsync(command.ActorId);
+
+        if (actor == null)
         {
-            result.Message = exception.Message;
-            _logger.LogError(exception, exception.Message);
-            throw;
+            result.Message = "Actor not found.";
+            _logger.LogError(result.Message);
+            return result;
         }
+
+        quote.Actor = actor;
+        await _quoteRepository.SaveChangesAsync();
+        result.SetSuccess(true);
+
 
         return result;
     }

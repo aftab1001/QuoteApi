@@ -19,9 +19,9 @@ public class GetQuotesByActorQueryHandler : IRequestHandler<GetQuotesByActorQuer
     public async Task<QuotesByActorResponseDto> Handle(GetQuotesByActorQuery request,
         CancellationToken cancellationToken)
     {
-        var result = new QuotesByActorResponseDto();
         var quotes = await _quoteByActorRepository.GetQuotesByActorAsync(request.ActorId);
+        var result = _mapper.Map<QuotesByActorResponseDto>(quotes);
         result.SetSuccess(true);
-        return _mapper.Map<QuotesByActorResponseDto>(quotes);
+        return result;
     }
 }

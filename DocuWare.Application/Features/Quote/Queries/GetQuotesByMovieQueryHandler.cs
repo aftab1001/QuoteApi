@@ -20,9 +20,9 @@ public class GetQuotesByMovieQueryHandler : IRequestHandler<GetQuotesByMovieQuer
     public async Task<QuotesByMovieResponseDto> Handle(GetQuotesByMovieQuery request,
         CancellationToken cancellationToken)
     {
-        var result = new QuotesByMovieResponseDto();
         var quotes = await _quoteByMovieRepository.GetQuotesByMovieAsync(request.MovieId);
+        var result = _mapper.Map<QuotesByMovieResponseDto>(quotes);
         result.SetSuccess(true);
-        return _mapper.Map<QuotesByMovieResponseDto>(quotes);
+        return result;
     }
 }

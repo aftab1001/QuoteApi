@@ -23,9 +23,11 @@ public class QuotesController : ControllerBase
     public async Task<IActionResult> CreateQuote([FromBody] CreateQuoteCommand command)
     {
         _logger.LogInformation(SendCreateQuoteCommandRequest);
-        await _mediator.Send(command);
+        var result = await _mediator.Send(command);
 
-        return Ok();
+        if (result.Success) return Ok("Successfully created quote");
+
+        return BadRequest(result.Message);
     }
 
     [HttpGet]
@@ -34,7 +36,9 @@ public class QuotesController : ControllerBase
         var query = new GetQuotesQuery();
         var quotes = await _mediator.Send(query);
 
-        return Ok(quotes);
+        if (quotes.Success) return Ok(quotes);
+
+        return BadRequest(quotes.Message);
     }
 
     [HttpGet("by-movie/{movieId}")]
@@ -43,7 +47,9 @@ public class QuotesController : ControllerBase
         var query = new GetQuotesByMovieQuery(movieId);
         var quotes = await _mediator.Send(query);
 
-        return Ok(quotes);
+        if (quotes.Success) return Ok(quotes);
+
+        return BadRequest(quotes.Message);
     }
 
     [HttpGet("by-actor/{actorId}")]
@@ -52,23 +58,19 @@ public class QuotesController : ControllerBase
         var query = new GetQuotesByActorQuery(actorId);
         var quotes = await _mediator.Send(query);
 
-        return Ok(quotes);
+        if (quotes.Success) return Ok(quotes);
+
+        return BadRequest(quotes.Message);
     }
 
     [HttpPost("quotes/{quoteId}/assign-actor")]
     public async Task<IActionResult> AssignActorToQuote(int quoteId, int actorId)
     {
-        try
-        {
-            var command = new AssignActorToQuoteCommand {QuoteId = quoteId, ActorId = actorId};
-            await _mediator.Send(command);
+        var command = new AssignActorToQuoteCommand {QuoteId = quoteId, ActorId = actorId};
+        var result = await _mediator.Send(command);
 
-            return Ok("Actor successfully assigned to the quote.");
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, ex.Message);
-            return StatusCode(500, "An error occurred while assigning the actor to the quote.");
-        }
+        if (result.Success) return Ok("Actor successfully assigned to the quote.");
+
+        return BadRequest(result.Message);
     }
 }

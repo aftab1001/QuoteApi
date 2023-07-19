@@ -19,9 +19,9 @@ public class GetQuotesQueryHandler : IRequestHandler<GetQuotesQuery, QuotesRespo
     public async Task<QuotesResponseDto> Handle(GetQuotesQuery request,
         CancellationToken cancellationToken)
     {
-        var result = new QuotesResponseDto();
         var quotes = await _quoteRepository.GetAllAsync();
+        var result = _mapper.Map<QuotesResponseDto>(quotes);
         result.SetSuccess(true);
-        return _mapper.Map<QuotesResponseDto>(quotes);
+        return result;
     }
 }
