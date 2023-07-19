@@ -1,21 +1,28 @@
-﻿using DocuWare.Application.Contracts;
+﻿using AutoMapper;
+using DocuWare.Application.Contracts;
+using DocuWare.Application.Features.Quote.Dtos;
 using MediatR;
 
 namespace DocuWare.Application.Features.Quote.Queries;
 
-public class GetQuotesByMovieQueryHandler : IRequestHandler<GetQuotesByMovieQuery, IEnumerable<Domain.Entities.Quote>>
+public class GetQuotesByMovieQueryHandler : IRequestHandler<GetQuotesByMovieQuery, QuotesByMovieResponseDto>
 {
+    private readonly IMapper _mapper;
     private readonly IQuoteByMovieRepository _quoteByMovieRepository;
 
-    public GetQuotesByMovieQueryHandler(IQuoteByMovieRepository quoteByMovieRepository)
+
+    public GetQuotesByMovieQueryHandler(IQuoteByMovieRepository quoteByMovieRepository, IMapper mapper)
     {
         _quoteByMovieRepository = quoteByMovieRepository;
+        _mapper = mapper;
     }
 
-    public async Task<IEnumerable<Domain.Entities.Quote>> Handle(GetQuotesByMovieQuery request,
+    public async Task<QuotesByMovieResponseDto> Handle(GetQuotesByMovieQuery request,
         CancellationToken cancellationToken)
     {
+        var result = new QuotesByMovieResponseDto();
         var quotes = await _quoteByMovieRepository.GetQuotesByMovieAsync(request.MovieId);
-        return quotes;
+        result.SetSuccess(true);
+        return _mapper.Map<QuotesByMovieResponseDto>(quotes);
     }
 }
