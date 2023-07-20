@@ -6,7 +6,10 @@ public static class SeedData
 {
     public static void Initialize(QuoteDbContext context)
     {
-        if (!context.Movies.Any()) SeedMovies(context);
+        var isDbCreated = context.Database.EnsureCreated();
+        if (isDbCreated)
+            if (!context.Movies.Any())
+                SeedMovies(context);
     }
 
     private static void SeedMovies(QuoteDbContext context)
