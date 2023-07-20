@@ -63,7 +63,8 @@ public class CreateQuoteCommandHandler : IRequestHandler<CreateQuoteCommand, Cre
 
     private async Task AssignCharacterToTheQuote(Domain.Entities.Quote quote)
     {
-        var characterByQuoteContent = await _characterByQuoteContentRepository.GetMovieByQuoteContent(quote.Content);
+        var characterByQuoteContent =
+            await _characterByQuoteContentRepository.GetCharacterByQuoteContent(quote.Content);
         var characters = characterByQuoteContent as Character[] ?? characterByQuoteContent.ToArray();
         if (!characters.Any()) throw new UserFriendlyException(ErrorMessage.NoCharacterFound);
         quote.Character = characters.FirstOrDefault()!;

@@ -14,6 +14,7 @@ public class QuoteDbContext : DbContext
     public DbSet<Actor> Actors { get; set; }
     public DbSet<Character> Characters { get; set; }
 
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // No additional mappings or constraints here

@@ -13,7 +13,7 @@ public class CharacterByQuoteContentRepository : ICharacterByQuoteContentReposit
         _context = context;
     }
 
-    public Task<IEnumerable<Character>> GetMovieByQuoteContent(string content)
+    public Task<IEnumerable<Character>> GetCharacterByQuoteContent(string content)
     {
         return Task.FromResult<IEnumerable<Character>>(
             _context.Characters
