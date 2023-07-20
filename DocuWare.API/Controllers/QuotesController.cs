@@ -20,6 +20,10 @@ public class QuotesController : ControllerBase
     }
 
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesDefaultResponseType]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> CreateQuote([FromBody] CreateQuoteCommand command)
     {
         _logger.LogInformation(SendCreateQuoteCommandRequest);
@@ -31,6 +35,10 @@ public class QuotesController : ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesDefaultResponseType]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetQuotes()
     {
         var query = new GetQuotesQuery();
@@ -42,6 +50,10 @@ public class QuotesController : ControllerBase
     }
 
     [HttpGet("by-movie/{movieId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesDefaultResponseType]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetQuotesByMovie(int movieId)
     {
         var query = new GetQuotesByMovieQuery(movieId);
@@ -53,6 +65,10 @@ public class QuotesController : ControllerBase
     }
 
     [HttpGet("by-actor/{actorId}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesDefaultResponseType]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetQuotesByActor(int actorId)
     {
         var query = new GetQuotesByActorQuery(actorId);
@@ -64,6 +80,10 @@ public class QuotesController : ControllerBase
     }
 
     [HttpPost("quotes/{quoteId}/assign-actor")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesDefaultResponseType]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> AssignActorToQuote(int quoteId, int actorId)
     {
         var command = new AssignActorToQuoteCommand {QuoteId = quoteId, ActorId = actorId};
